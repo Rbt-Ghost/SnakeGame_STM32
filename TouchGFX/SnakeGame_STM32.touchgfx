@@ -5,13 +5,14 @@
         "Name": "Screen1",
         "Components": [
           {
-            "Type": "Image",
-            "Name": "Grid",
-            "X": -168,
-            "Y": -95,
-            "Width": 630,
-            "Height": 631,
-            "RelativeFilename": "grid.png"
+            "Type": "ScalableImage",
+            "Name": "GridScalabil",
+            "X": -21,
+            "Y": -15,
+            "Width": 477,
+            "Height": 455,
+            "Filename": "grid.png",
+            "ScalingAlgorithm": "Bilinear Interpolation"
           },
           {
             "Type": "Container",

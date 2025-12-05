@@ -15,7 +15,7 @@ void Screen1View::setupScreen()
     {
         snakeSegments[i].setWidth(20);  // Mărimea unui pătrățel
         snakeSegments[i].setHeight(20);
-        snakeSegments[i].setColor(touchgfx::Color::getColorFromRGB(0, 255, 0)); // Verde
+        snakeSegments[i].setColor(touchgfx::Color::getColorFromRGB(0, 255, 255)); // Cyan
         snakeSegments[i].setVisible(false); // Invizibil la start
 
         // Adăugăm la containerul creat în Designer (gameContainer)
