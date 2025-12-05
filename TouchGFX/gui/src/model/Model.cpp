@@ -1,21 +1,31 @@
+#include <gui/model/Model.hpp>
+#include <gui/model/ModelListener.hpp>
+
+// Constructorul
 Model::Model() : modelListener(0), snakeLength(3), score(0), counter(0), direction(1)
 {
-    // Inițializează șarpele la o poziție de start
-    snakeX[0] = 5; snakeY[0] = 5;
-    // ... restul corpului
+    // Inițializare simplă a șarpelui (în afara ecranului inițial)
+    for(int i = 0; i < SNAKE_MAX_LEN; i++) {
+        snakeX[i] = -20;
+        snakeY[i] = -20;
+    }
+
+    // Setăm capul șarpelui la o poziție vizibilă (ex: 5,5 în grilă)
+    snakeX[0] = 5;
+    snakeY[0] = 5;
 }
 
+// Funcția care rulează în buclă (tick)
 void Model::tick()
 {
     counter++;
-    if (counter % 10 == 0) // Executăm logica doar la fiecare 10 frame-uri (jocul e prea rapid altfel)
+
+    // Actualizăm logica doar o dată la 10 frame-uri (pentru a încetini jocul)
+    if (counter % 10 == 0)
     {
-        // 1. LOGICA DE MIȘCARE AICI
-        // (Mută corpul, mută capul în funcție de 'direction')
+        // --- AICI VEI SCRIE LOGICA JOCULUI MAI TÂRZIU ---
 
-        // ... codul tău de snake ...
-
-        // 2. Notificăm interfața grafică
+        // Trimitem datele către interfață (View)
         if (modelListener != 0)
         {
             modelListener->updateSnakeGame(snakeX, snakeY, snakeLength, score);
