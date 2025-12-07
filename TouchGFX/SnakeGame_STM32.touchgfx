@@ -24,13 +24,12 @@
           {
             "Type": "TextArea",
             "Name": "Score",
-            "X": 77,
-            "Y": 13,
-            "Width": 86,
+            "X": 10,
+            "Y": 11,
+            "Width": 220,
             "Height": 20,
             "TextId": "__SingleUse_DMIH",
             "TextRotation": "0",
-            "AutoSize": true,
             "Wildcard1": {
               "TextId": "__SingleUse_YUT8",
               "UseBuffer": true,

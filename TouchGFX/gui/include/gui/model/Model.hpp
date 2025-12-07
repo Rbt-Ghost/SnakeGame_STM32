@@ -9,29 +9,37 @@ public:
     Model();
     void tick();
     void bind(ModelListener* listener) { modelListener = listener; }
-
-    // Funcție nouă pentru a primi input de la ecran
     void setNewDirection(int d);
 
 protected:
     ModelListener* modelListener;
 
     static const int SNAKE_MAX_LEN = 100;
-    static const int GRID_W = 20; // 480 / 20 = 24 celule (aprox)
-    static const int GRID_H = 13; // 272 / 20 = 13 celule (aprox)
+
+    // --- FIX 4: Definire corectă Grid (pentru ecran 240x320 sau 320x240) ---
+    // Dacă ai ecran 320x240 și bloc de 20px: 320/20 = 16, 240/20 = 12
+    // Dacă ai ecran 240x320: 240/20 = 12, 320/20 = 16
+    // Ajustează numerele de mai jos în funcție de rezoluția ta din TouchGFX!
+    static const int GRID_WIDTH  = 12; // Exemplu pentru lățime ecran 240px
+    static const int GRID_HEIGHT = 16; // Exemplu pentru înălțime ecran 320px
 
     int snakeX[SNAKE_MAX_LEN];
     int snakeY[SNAKE_MAX_LEN];
     int snakeLength;
 
-    // Variabile noi pentru mâncare
     int foodX;
     int foodY;
 
     int score;
     int counter;
-    int currentDirection; // 0=Sus, 1=Dr, 2=Jos, 3=St
-    int nextDirection;    // Buffer pentru a preveni schimbarea bruscă (ex: stânga->dreapta instant)
+    int currentDirection;
+    int nextDirection;
+
+    // --- FIX 1: Variabilă pentru starea jocului ---
+    bool isGameRunning;
+    bool isGameOver;
+
+    void resetGame(); // Funcție helper
 };
 
 #endif // MODEL_HPP

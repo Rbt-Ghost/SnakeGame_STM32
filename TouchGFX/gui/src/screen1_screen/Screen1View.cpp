@@ -74,10 +74,11 @@ void Screen1View::updateFoodUI(int x, int y)
 
 void Screen1View::updateScore(int score)
 {
-    // Aici vei pune logica pentru scor (TextArea)
-    // textScore.invalidate();
-    // Unicode::snprintf(...)
-    // textScore.invalidate();
+    // Folosim 'ScoreBuffer' (cu S mare) așa cum sugerează compilatorul
+    Unicode::snprintf(ScoreBuffer, SCORE_SIZE, "%d", score);
+
+    // Invalidăm widget-ul 'Score'
+    Score.invalidate();
 }
 
 void Screen1View::handleDragEvent(const touchgfx::DragEvent& evt)
