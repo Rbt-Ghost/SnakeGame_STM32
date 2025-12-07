@@ -22,6 +22,15 @@
             "Components": []
           },
           {
+            "Type": "Container",
+            "Name": "SnakeContainer",
+            "X": 53,
+            "Y": 130,
+            "Width": 60,
+            "Height": 30,
+            "Components": []
+          },
+          {
             "Type": "TextArea",
             "Name": "Score",
             "X": 10,
@@ -30,21 +39,17 @@
             "Height": 20,
             "TextId": "__SingleUse_DMIH",
             "TextRotation": "0",
+            "Color": {
+              "Red": 167,
+              "Green": 253,
+              "Blue": 247
+            },
             "Wildcard1": {
               "TextId": "__SingleUse_YUT8",
               "UseBuffer": true,
               "BufferSize": 5
             },
             "WideTextAction": 6
-          },
-          {
-            "Type": "Container",
-            "Name": "SnakeContainer",
-            "X": 53,
-            "Y": 130,
-            "Width": 60,
-            "Height": 30,
-            "Components": []
           }
         ],
         "Interactions": []

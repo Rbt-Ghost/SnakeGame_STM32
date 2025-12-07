@@ -1,7 +1,7 @@
 #include <gui/screen1_screen/Screen1View.hpp>
 #include <touchgfx/Color.hpp>
 #include <touchgfx/Utils.hpp>
-#include <stdlib.h> // pentru abs()
+#include <stdlib.h>
 
 Screen1View::Screen1View()
 {
@@ -11,36 +11,101 @@ void Screen1View::setupScreen()
 {
     Screen1ViewBase::setupScreen();
 
-    // 1. Inițializare Șarpe (Verde)
+    // ========================================================
+    // 1. CONFIGURARE CULORI (HEX convertit în RGB)
+    // ========================================================
+    const colortype COLOR_GRID_BG   = touchgfx::Color::getColorFromRGB(66, 24, 105);  // #421869
+    const colortype COLOR_GRID_TILE = touchgfx::Color::getColorFromRGB(153, 91, 213); // #995BD5
+
+    const colortype COLOR_SNAKE_HEAD = touchgfx::Color::getColorFromRGB(80, 151, 36); // #509724
+    const colortype COLOR_SNAKE_BODY = touchgfx::Color::getColorFromRGB(150, 215, 76); // #96D74C
+    const colortype COLOR_FOOD       = touchgfx::Color::getColorFromRGB(255, 0, 0);   // Roșu
+    // ========================================================
+
+    const int CELL_SIZE = 20;
+    const int COLS = 12; // 240 / 20
+    const int ROWS = 16; // 320 / 20
+
+    // --- A. Desenare Fundal Grid (Culoarea închisă) ---
+    backgroundBox.setXY(0, 0);
+    backgroundBox.setWidth(240);
+    backgroundBox.setHeight(320);
+    backgroundBox.setColor(COLOR_GRID_BG);
+    add(backgroundBox);
+
+    // --- B. Desenare Model Șah (Culoarea deschisă) ---
+    int boxIndex = 0;
+    for (int y = 0; y < ROWS; y++)
+    {
+        for (int x = 0; x < COLS; x++)
+        {
+            // Desenăm pătrățelul doar dacă poziția este "impară"
+            if ((x + y) % 2 != 0)
+            {
+                if (boxIndex < NUM_GRID_PATTERN)
+                {
+                    gridPattern[boxIndex].setXY(x * CELL_SIZE, y * CELL_SIZE);
+                    gridPattern[boxIndex].setWidth(CELL_SIZE);
+                    gridPattern[boxIndex].setHeight(CELL_SIZE);
+                    gridPattern[boxIndex].setColor(COLOR_GRID_TILE);
+
+                    add(gridPattern[boxIndex]);
+                    boxIndex++;
+                }
+            }
+        }
+    }
+
+    // --- 2. Inițializare Șarpe cu noile culori ---
     for (int i = 0; i < MAX_SNAKE_LENGTH; i++)
     {
-        // Folosim direct 20 sau constanta GRID_SIZE dacă e definită static
-        snakeSegments[i].setWidth(20);
-        snakeSegments[i].setHeight(20);
-        snakeSegments[i].setColor(touchgfx::Color::getColorFromRGB(0, 255, 0)); // Verde
-        snakeSegments[i].setVisible(false); // Invizibil la start
+        snakeSegments[i].setWidth(CELL_SIZE);
+        snakeSegments[i].setHeight(CELL_SIZE);
+
+        if (i == 0)
+        {
+            // Capul Șarpelui (#509724)
+            snakeSegments[i].setColor(COLOR_SNAKE_HEAD);
+        }
+        else
+        {
+            // Corpul Șarpelui (#96D74C)
+            snakeSegments[i].setColor(COLOR_SNAKE_BODY);
+        }
+
+        snakeSegments[i].setVisible(false);
         add(snakeSegments[i]);
     }
 
-    // 2. Inițializare Mâncare (Roșie)
-    foodItem.setWidth(20);
-    foodItem.setHeight(20);
-    foodItem.setColor(touchgfx::Color::getColorFromRGB(255, 0, 0)); // Roșu
+    // --- 3. Mâncare ---
+    foodItem.setWidth(CELL_SIZE);
+    foodItem.setHeight(CELL_SIZE);
+    foodItem.setColor(COLOR_FOOD);
     foodItem.setVisible(false);
     add(foodItem);
+
+    // --- 4. Scor ---
+    // Îl scoatem din lista de desenare (de sub fundal)
+        remove(Score);
+
+        // Îl adăugăm din nou (astfel va fi desenat ultimul, DEASUPRA fundalului)
+        add(Score);
+
+        // Forțăm redesenarea
+        Score.invalidate();
 }
 
-// --- ACEASTA ESTE FUNCȚIA CARE LIPSEA ---
 void Screen1View::tearDownScreen()
 {
     Screen1ViewBase::tearDownScreen();
 }
-// ----------------------------------------
 
+// ... Restul funcțiilor (updateSnakeUI, etc.) rămân neschimbate ...
+// Asigură-te că le păstrezi!
 void Screen1View::updateSnakeUI(int* xBody, int* yBody, int length)
 {
-    const int GRID_SIZE = 20;
-
+   // ... codul tău existent ...
+   const int GRID_SIZE = 20;
     for (int i = 0; i < MAX_SNAKE_LENGTH; i++)
     {
         if (i < length)
@@ -65,7 +130,6 @@ void Screen1View::updateSnakeUI(int* xBody, int* yBody, int length)
 void Screen1View::updateFoodUI(int x, int y)
 {
     const int GRID_SIZE = 20;
-
     foodItem.invalidate();
     foodItem.setXY(x * GRID_SIZE, y * GRID_SIZE);
     if (!foodItem.isVisible()) foodItem.setVisible(true);
@@ -74,10 +138,7 @@ void Screen1View::updateFoodUI(int x, int y)
 
 void Screen1View::updateScore(int score)
 {
-    // Folosim 'ScoreBuffer' (cu S mare) așa cum sugerează compilatorul
     Unicode::snprintf(ScoreBuffer, SCORE_SIZE, "%d", score);
-
-    // Invalidăm widget-ul 'Score'
     Score.invalidate();
 }
 
@@ -85,21 +146,12 @@ void Screen1View::handleDragEvent(const touchgfx::DragEvent& evt)
 {
     int dx = evt.getDeltaX();
     int dy = evt.getDeltaY();
-
     if (abs(dx) > abs(dy))
     {
-        if (abs(dx) > 5)
-        {
-            if (dx > 0) presenter->userSetDirection(1); // Dreapta
-            else        presenter->userSetDirection(3); // Stânga
-        }
+        if (abs(dx) > 5) presenter->userSetDirection(dx > 0 ? 1 : 3);
     }
     else
     {
-        if (abs(dy) > 5)
-        {
-            if (dy > 0) presenter->userSetDirection(2); // Jos
-            else        presenter->userSetDirection(0); // Sus
-        }
+        if (abs(dy) > 5) presenter->userSetDirection(dy > 0 ? 2 : 0);
     }
 }
