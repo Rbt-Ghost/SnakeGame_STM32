@@ -30,6 +30,9 @@ public:
     // Adaugă override la funcția definită mai sus
     virtual void updateSnakeGame(int* xBody, int* yBody, int length, int score);
 
+    virtual void updateSnakeGame(int* xBody, int* yBody, int length, int score, int foodX, int foodY);
+    void userSetDirection(int d); // Chemată de View când dai swipe
+
 private:
     Screen1Presenter();
 

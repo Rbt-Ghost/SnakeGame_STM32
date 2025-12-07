@@ -23,3 +23,15 @@ void Screen1Presenter::updateSnakeGame(int* xBody, int* yBody, int length, int s
     view.updateSnakeUI(xBody, yBody, length);
     view.updateScore(score);
 }
+
+void Screen1Presenter::updateSnakeGame(int* xBody, int* yBody, int length, int score, int foodX, int foodY)
+{
+    view.updateSnakeUI(xBody, yBody, length);
+    view.updateFoodUI(foodX, foodY); // Vom crea asta în View
+    view.updateScore(score);
+}
+
+void Screen1Presenter::userSetDirection(int d)
+{
+    model->setNewDirection(d);
+}

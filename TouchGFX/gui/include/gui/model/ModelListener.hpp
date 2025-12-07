@@ -1,10 +1,8 @@
 #ifndef MODELLISTENER_HPP
 #define MODELLISTENER_HPP
 
-#include <gui/model/Model.hpp>
-
-// Șterge sau comentează linia de mai sus (#include <gui/model/Model.hpp>)
-// Adaugă linia de mai jos:
+// --- ȘTERGE linia: #include <gui/model/Model.hpp> ---
+// Folosim doar forward declaration:
 class Model;
 
 class ModelListener
@@ -19,9 +17,8 @@ public:
         model = m;
     }
 
-    // --- ADAUGĂ ACEASTĂ FUNCȚIE VIRTUALĂ ---
-    virtual void updateSnakeGame(int* xBody, int* yBody, int length, int score) {}
-    // ---------------------------------------
+    // Funcția apelată din Model când se schimbă jocul
+    virtual void updateSnakeGame(int* xBody, int* yBody, int length, int score, int foodX, int foodY) {}
 
 protected:
     Model* model;
