@@ -87,9 +87,11 @@ void Screen1View::setupScreen()
     // --- 4. Scor ---
     // Îl scoatem din lista de desenare (de sub fundal)
         remove(Score);
+        remove(box1);
 
         // Îl adăugăm din nou (astfel va fi desenat ultimul, DEASUPRA fundalului)
         add(Score);
+        add(box1);
 
         // Forțăm redesenarea
         Score.invalidate();

@@ -31,18 +31,26 @@
             "Components": []
           },
           {
+            "Type": "Box",
+            "Name": "box1",
+            "X": 10,
+            "Y": 11,
+            "Width": 220,
+            "Height": 28,
+            "Alpha": 60
+          },
+          {
             "Type": "TextArea",
             "Name": "Score",
             "X": 10,
             "Y": 11,
             "Width": 220,
-            "Height": 20,
+            "Height": 28,
             "TextId": "__SingleUse_DMIH",
             "TextRotation": "0",
             "Color": {
-              "Red": 167,
-              "Green": 253,
-              "Blue": 247
+              "Red": 255,
+              "Green": 145
             },
             "Wildcard1": {
               "TextId": "__SingleUse_YUT8",
