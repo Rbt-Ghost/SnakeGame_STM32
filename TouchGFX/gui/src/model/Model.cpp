@@ -38,10 +38,9 @@ void Model::resetGame()
 
 void Model::tick()
 {
-    // --- FIX 1: Dacă jocul nu rulează, nu facem nimic ---
+    // Dacă jocul nu rulează, nu facem nimic
     if (!isGameRunning || isGameOver)
     {
-        // Totuși, trimitem datele ca să se deseneze starea inițială
         if (modelListener != 0 && counter == 0)
         {
              modelListener->updateSnakeGame(snakeX, snakeY, snakeLength, score, foodX, foodY);
@@ -53,7 +52,7 @@ void Model::tick()
     counter++;
     if (counter % 10 == 0)
     {
-        // Actualizare direcție
+        // ... (Codul de actualizare direcție rămâne neschimbat) ...
         if ((nextDirection == 0 && currentDirection != 2) ||
             (nextDirection == 1 && currentDirection != 3) ||
             (nextDirection == 2 && currentDirection != 0) ||
@@ -62,7 +61,7 @@ void Model::tick()
             currentDirection = nextDirection;
         }
 
-        // Calculăm viitoarea poziție a capului
+        // ... (Codul de calculare cap nou rămâne neschimbat) ...
         int newHeadX = snakeX[0];
         int newHeadY = snakeY[0];
 
@@ -74,12 +73,11 @@ void Model::tick()
             case 3: newHeadX--; break; // Stânga
         }
 
-        // --- FIX 3: Verificare Coliziune cu Pereții ---
+        // Verificare Coliziune cu Pereții
         if (newHeadX < 0 || newHeadX >= GRID_WIDTH ||
             newHeadY < 0 || newHeadY >= GRID_HEIGHT)
         {
-            isGameOver = true; // S-a lovit de zid
-            // Aici ai putea reseta jocul automat:
+            isGameOver = true;
             resetGame();
             return;
         }
@@ -105,16 +103,35 @@ void Model::tick()
         snakeX[0] = newHeadX;
         snakeY[0] = newHeadY;
 
-        // Verificăm mâncarea
+        // ================================================================
+        // --- FIX: Mâncarea nu se mai spawnează în corpul șarpelui ---
+        // ================================================================
         if (snakeX[0] == foodX && snakeY[0] == foodY)
         {
             score += 10;
             if (snakeLength < SNAKE_MAX_LEN) snakeLength++;
 
-            // --- FIX 4: Mâncarea se spawnează STRICT în grid ---
-            foodX = rand() % GRID_WIDTH;
-            foodY = rand() % GRID_HEIGHT;
+            bool positionIsValid = false;
+            while (!positionIsValid)
+            {
+                positionIsValid = true; // Presupunem că e bună poziția
+
+                // 1. Generăm coordonate aleatorii
+                foodX = rand() % GRID_WIDTH;
+                foodY = rand() % GRID_HEIGHT;
+
+                // 2. Verificăm dacă se suprapune cu ORICE segment al șarpelui
+                for (int i = 0; i < snakeLength; i++)
+                {
+                    if (snakeX[i] == foodX && snakeY[i] == foodY)
+                    {
+                        positionIsValid = false; // Coliziune detectată!
+                        break; // Ieșim din for și generăm din nou (while continuă)
+                    }
+                }
+            }
         }
+        // ================================================================
 
         if (modelListener != 0)
         {
